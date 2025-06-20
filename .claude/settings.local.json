@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm:*)",
+      "WebFetch(domain:)",
+      "Bash(grep:*)",
+      "Bash(ng generate:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm install)",
+      "Bash(npx tsc:*)",
+      "Bash(timeout 10s npm start)",
+      "Bash(find:*)",
+      "Bash(true)",
+      "Bash(npm install:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(ls:*)",
+      "Bash(timeout:*)",
+      "Bash(npm cache clean:*)",
+      "Bash(sudo rm:*)",
+      "Bash(./node_modules/.bin/tsc:*)",
+      "Bash(ng version)",
+      "Bash(npm start)",
+      "Bash(mkdir:*)"
+    ],
+    "deny": []
+  }
+}

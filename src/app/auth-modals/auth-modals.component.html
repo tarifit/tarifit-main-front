@@ -1,0 +1,199 @@
+<!-- Auth Modal -->
+<div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center" [class.hidden]="!isModalOpen">
+  <div 
+    id="authModalBackdrop" 
+    class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+    (click)="closeAuthModal()">
+  </div>
+  
+  <div class="relative glass-tarifit rounded-2xl p-0 w-full max-w-md mx-4 animate-modal-enter">
+    <button 
+      id="authModalCloseBtn" 
+      class="absolute top-4 right-4 text-tarifit-text-muted hover:text-tarifit-text-primary transition-colors z-20 w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10"
+      (click)="closeAuthModal()">
+      ✕
+    </button>
+    
+    <!-- Login/Register tabs -->
+    <div class="flex border-b border-tarifit-border-default" *ngIf="currentMode !== 'reset-password' && currentMode !== 'forgot-password'">
+      <button 
+        id="loginTab" 
+        class="flex-1 py-4 px-6 text-center font-medium transition-all"
+        [class.tarifit-nav-item]="currentMode !== 'login'"
+        [class.tab-active-login]="currentMode === 'login'"
+        (click)="switchMode('login')">
+        🔑 Login
+      </button>
+      <button 
+        id="registerTab" 
+        class="flex-1 py-4 px-6 text-center font-medium transition-all"
+        [class.tarifit-nav-item]="currentMode !== 'register'"
+        [class.tab-active]="currentMode === 'register'"
+        (click)="switchMode('register')">
+        👤 Register
+      </button>
+    </div>
+    
+    <!-- Reset Password Header -->
+    <div class="px-6 py-4 border-b border-tarifit-border-default" *ngIf="currentMode === 'reset-password'">
+      <h3 class="text-lg font-semibold text-tarifit-text-primary text-center">🔐 Reset Password</h3>
+    </div>
+    
+    <!-- Forgot Password Header -->
+    <div class="px-6 py-4 border-b border-tarifit-border-default" *ngIf="currentMode === 'forgot-password'">
+      <h3 class="text-lg font-semibold text-tarifit-text-primary text-center">🔑 Forgot Password</h3>
+    </div>
+
+    <form id="authForm" class="p-6 space-y-4" (submit)="handleSubmit($event)">
+      <!-- Username Field -->
+      <div *ngIf="currentMode !== 'reset-password'">
+        <label class="block text-sm font-medium text-tarifit-text-secondary mb-2">Username:</label>
+        <input 
+          type="text" 
+          id="username"
+          name="username"
+          [(ngModel)]="formData.username"
+          placeholder="Enter your username" 
+          class="w-full px-4 py-3 bg-black/30 border border-tarifit-border-hover rounded-xl text-tarifit-text-primary placeholder-tarifit-text-placeholder focus:border-tarifit-primary focus:outline-none focus:ring-2 focus:ring-tarifit-primary/20 transition-all"
+          [style.borderColor]="errors.username ? '#ef4444' : ''"
+          (input)="clearFieldError('username')" />
+        <div 
+          id="usernameError" 
+          class="mt-1 text-sm text-red-400 flex items-center gap-1"
+          [class.hidden]="!errors.username">
+          ⚠️ <span>{{ errors.username }}</span>
+        </div>
+      </div>
+
+      <!-- Email Field (Register and Forgot Password) -->
+      <div id="emailField" [class.hidden]="currentMode === 'login' || currentMode === 'reset-password'">
+        <label class="block text-sm font-medium text-tarifit-text-secondary mb-2">Email:</label>
+        <input 
+          type="email" 
+          id="email"
+          name="email"
+          [(ngModel)]="formData.email"
+          placeholder="Enter your email" 
+          class="w-full px-4 py-3 bg-black/30 border border-tarifit-border-hover rounded-xl text-tarifit-text-primary placeholder-tarifit-text-placeholder focus:border-tarifit-primary focus:outline-none focus:ring-2 focus:ring-tarifit-primary/20 transition-all"
+          [style.borderColor]="errors.email ? '#ef4444' : ''"
+          (input)="clearFieldError('email')" />
+        <div 
+          id="emailError" 
+          class="mt-1 text-sm text-red-400 flex items-center gap-1"
+          [class.hidden]="!errors.email">
+          ⚠️ <span>{{ errors.email }}</span>
+        </div>
+      </div>
+
+      <!-- Password Field (Login, Register, Reset Password - not Forgot Password) -->
+      <div *ngIf="currentMode !== 'forgot-password'">
+        <label class="block text-sm font-medium text-tarifit-text-secondary mb-2">
+          {{ currentMode === 'reset-password' ? 'New Password:' : 'Password:' }}
+        </label>
+        <input 
+          type="password" 
+          id="password"
+          name="password"
+          [(ngModel)]="formData.password"
+          placeholder="{{ currentMode === 'reset-password' ? 'Enter your new password' : 'Enter your password' }}" 
+          class="w-full px-4 py-3 bg-black/30 border border-tarifit-border-hover rounded-xl text-tarifit-text-primary placeholder-tarifit-text-placeholder focus:border-tarifit-primary focus:outline-none focus:ring-2 focus:ring-tarifit-primary/20 transition-all"
+          [style.borderColor]="errors.password ? '#ef4444' : ''"
+          (input)="clearFieldError('password')" />
+        <div 
+          id="passwordError" 
+          class="mt-1 text-sm text-red-400 flex items-center gap-1"
+          [class.hidden]="!errors.password">
+          ⚠️ <span>{{ errors.password }}</span>
+        </div>
+      </div>
+
+      <!-- Confirm Password Field (Register and Reset Password only) -->
+      <div id="confirmPasswordField" [class.hidden]="currentMode === 'login' || currentMode === 'forgot-password'">
+        <label class="block text-sm font-medium text-tarifit-text-secondary mb-2">
+          {{ currentMode === 'reset-password' ? 'Confirm New Password:' : 'Confirm Password:' }}
+        </label>
+        <input 
+          type="password" 
+          id="confirmPassword"
+          name="confirmPassword"
+          [(ngModel)]="formData.confirmPassword"
+          placeholder="{{ currentMode === 'reset-password' ? 'Confirm your new password' : 'Confirm your password' }}" 
+          class="w-full px-4 py-3 bg-black/30 border border-tarifit-border-hover rounded-xl text-tarifit-text-primary placeholder-tarifit-text-placeholder focus:border-tarifit-primary focus:outline-none focus:ring-2 focus:ring-tarifit-primary/20 transition-all"
+          [style.borderColor]="errors.confirmPassword ? '#ef4444' : ''"
+          (input)="clearFieldError('confirmPassword')" />
+        <div 
+          id="confirmPasswordError" 
+          class="mt-1 text-sm text-red-400 flex items-center gap-1"
+          [class.hidden]="!errors.confirmPassword">
+          ⚠️ <span>{{ errors.confirmPassword }}</span>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        id="submitBtn"
+        [disabled]="isLoading"
+        [class]="currentMode === 'register' || currentMode === 'reset-password' ? 
+          'w-full px-8 py-4 bg-tarifit-accent text-white rounded-xl font-semibold hover:transform hover:-translate-y-1 transition-all btn-full-width-mt-6' : 
+          'w-full px-8 py-4 bg-tarifit-primary text-white rounded-xl font-semibold hover:transform hover:-translate-y-1 transition-all btn-full-width-mt-6'">
+        <span *ngIf="!isLoading">
+          {{ currentMode === 'register' ? 'Register' : 
+             currentMode === 'reset-password' ? 'Reset Password' : 
+             currentMode === 'forgot-password' ? 'Send Reset Email' : 'Login' }}
+        </span>
+        <div *ngIf="isLoading" class="tarifit-flex" style="gap: 0.5rem; justify-content: center;">
+          <div class="tarifit-spinner-sm"></div>
+          {{ currentMode === 'register' ? 'Creating Account...' : 
+             currentMode === 'reset-password' ? 'Resetting Password...' : 
+             currentMode === 'forgot-password' ? 'Sending Email...' : 'Signing In...' }}
+        </div>
+      </button>
+
+      <!-- Switch Mode Text -->
+      <div class="text-center mt-4" *ngIf="currentMode !== 'reset-password' && currentMode !== 'forgot-password'">
+        <span class="text-tarifit-text-secondary text-sm" id="switchText">
+          <span *ngIf="currentMode === 'login'">
+            Don't have an account? 
+            <button 
+              type="button" 
+              class="text-tarifit-accent hover:text-yellow-400 font-medium transition-colors"
+              (click)="switchMode('register')">
+              Register here
+            </button>
+          </span>
+          <span *ngIf="currentMode === 'register'">
+            Already have an account? 
+            <button 
+              type="button" 
+              class="text-tarifit-accent hover:text-yellow-400 font-medium transition-colors"
+              (click)="switchMode('login')">
+              Login here
+            </button>
+          </span>
+        </span>
+      </div>
+      
+      <!-- Forgot Password Link (Login tab only) -->
+      <div class="text-center mt-2" *ngIf="currentMode === 'login'">
+        <button 
+          type="button" 
+          class="text-tarifit-text-secondary text-sm hover:text-tarifit-accent transition-colors"
+          (click)="openForgotPasswordModal()">
+          Forgot your password? 
+          <span class="text-tarifit-accent hover:text-yellow-400 font-medium transition-colors">Reset your password</span>
+        </button>
+      </div>
+      
+      <!-- Back to Login from Reset/Forgot Password -->
+      <div class="text-center mt-4" *ngIf="currentMode === 'reset-password' || currentMode === 'forgot-password'">
+        <button 
+          type="button" 
+          class="text-tarifit-text-secondary text-sm hover:text-tarifit-accent transition-colors"
+          (click)="switchMode('login')">
+          ← Back to Login
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

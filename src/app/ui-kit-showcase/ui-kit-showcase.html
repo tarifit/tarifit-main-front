@@ -1,0 +1,201 @@
+<div class="demo-container">
+  <!-- Header -->
+  <header class="demo-section">
+    <h1 class="demo-title">Tamawalt UI Kit</h1>
+    <p class="demo-subtitle">Clean components extracted from your Tayrawt dictionary</p>
+  </header>
+
+  <!-- Component Examples -->
+  <section class="demo-section">
+    <h2 style="text-align: center; color: #ffffff; margin-bottom: 2rem; font-size: 2rem;">UI Components</h2>
+    
+    <div class="component-grid">
+      <!-- Buttons -->
+      <div class="component-showcase">
+        <h3>Buttons</h3>
+        <div class="example-row">
+          <button class="tm-btn">Default Button</button>
+          <button class="tm-btn tm-btn--primary">Primary Button</button>
+          <button class="tm-btn tm-btn--blue">Blue Button</button>
+        </div>
+        <div class="example-row">
+          <button class="tm-btn">
+            <i class="fas fa-star"></i>
+            With Icon
+          </button>
+          <button class="tm-btn tm-btn--primary">
+            <i class="fas fa-seedling"></i>
+            Join Community
+          </button>
+        </div>
+      </div>
+
+      <!-- Inputs -->
+      <div class="component-showcase">
+        <h3>Input Fields</h3>
+        <div class="example-row">
+          <input type="text" class="tm-input" placeholder="Regular input field">
+        </div>
+        <div class="example-row">
+          <input type="email" class="tm-input" placeholder="Email address">
+        </div>
+        <div class="example-row">
+          <textarea class="tm-input" rows="3" placeholder="Your message..."></textarea>
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <div class="component-showcase">
+        <h3>Word Cards</h3>
+        <div class="tm-card">
+          <div class="tm-card-title">abəḥri</div>
+          <div class="tm-card-subtitle">sea, ocean</div>
+          <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <span class="tm-badge tm-badge--yellow">aqelɛi</span>
+            <span class="tm-badge tm-badge--green">95% match</span>
+          </div>
+          <div class="tm-card-content">
+            <div style="margin: 15px 0; padding: 15px; background: rgba(0, 0, 0, 0.3); border-radius: 10px; border-left: 3px solid #3b82f6; font-style: italic; color: #d1d5db;">
+              "abəḥri ittalasa - the sea is calm"
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toggles -->
+      <div class="component-showcase">
+        <h3>Toggle Switches</h3>
+        <div class="example-row">
+          <div class="tm-toggle" (click)="toggleExample('notifications')">
+            <div class="tm-toggle-switch" [class.active]="toggles.notifications">
+              <div class="tm-toggle-thumb"></div>
+            </div>
+            <span class="tm-toggle-label">Enable notifications</span>
+          </div>
+        </div>
+        <div class="example-row">
+          <div class="tm-toggle" (click)="toggleExample('darkMode')">
+            <div class="tm-toggle-switch" [class.active]="toggles.darkMode">
+              <div class="tm-toggle-thumb"></div>
+            </div>
+            <span class="tm-toggle-label">Dark mode</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Button Groups -->
+      <div class="component-showcase">
+        <h3>Button Groups</h3>
+        <div class="example-row">
+          <div class="tm-btn-group">
+            <button 
+              class="tm-btn" 
+              [class.active]="searchMode === 'semantic'"
+              (click)="setSearchMode('semantic')">
+              Semantic
+            </button>
+            <button 
+              class="tm-btn" 
+              [class.active]="searchMode === 'exact'"
+              (click)="setSearchMode('exact')">
+              Exact
+            </button>
+            <button 
+              class="tm-btn" 
+              [class.active]="searchMode === 'fuzzy'"
+              (click)="setSearchMode('fuzzy')">
+              Fuzzy
+            </button>
+          </div>
+        </div>
+        <div class="example-row">
+          <div class="tm-btn-group">
+            <button 
+              class="tm-btn" 
+              [class.active]="alignment === 'left'"
+              (click)="setAlignment('left')">
+              Left
+            </button>
+            <button 
+              class="tm-btn" 
+              [class.active]="alignment === 'center'"
+              (click)="setAlignment('center')">
+              Center
+            </button>
+            <button 
+              class="tm-btn" 
+              [class.active]="alignment === 'right'"
+              (click)="setAlignment('right')">
+              Right
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Badges -->
+      <div class="component-showcase">
+        <h3>Badges</h3>
+        <div class="example-row">
+          <span class="tm-badge tm-badge--yellow">Primary</span>
+          <span class="tm-badge tm-badge--blue">Info</span>
+          <span class="tm-badge tm-badge--green">Success</span>
+          <span class="tm-badge tm-badge--purple">Purple</span>
+        </div>
+        <div class="example-row">
+          <span class="tm-badge tm-badge--yellow">aqelɛi</span>
+          <span class="tm-badge tm-badge--yellow">waryaghri</span>
+        </div>
+        <div class="example-row">
+          <span class="tm-badge tm-badge--green">95% match</span>
+          <span class="tm-badge tm-badge--blue">NEW</span>
+        </div>
+      </div>
+
+      <!-- Search Components -->
+      <div class="component-showcase">
+        <h3>Search Input</h3>
+        <div class="tm-search-container">
+          <input 
+            type="text" 
+            class="tm-search-input" 
+            placeholder="Search in Tarifit..." 
+            [value]="demoSearchQuery"
+            (input)="demoSearchQuery = $any($event.target).value">
+          <button class="tm-search-btn"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Color Palette -->
+  <section class="demo-section">
+    <h2 style="text-align: center; color: #ffffff; margin-bottom: 2rem; font-size: 2rem;">Color Palette</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; max-width: 800px; margin: 0 auto;">
+      <div style="text-align: center;">
+        <div style="height: 80px; background: #1a1b23; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 0.5rem;"></div>
+        <div style="color: #d1d5db; font-size: 0.9rem;">Primary BG</div>
+        <div style="color: #6b7280; font-size: 0.8rem;">#1a1b23</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="height: 80px; background: #3b82f6; border-radius: 12px; margin-bottom: 0.5rem;"></div>
+        <div style="color: #d1d5db; font-size: 0.9rem;">Blue Accent</div>
+        <div style="color: #6b7280; font-size: 0.8rem;">#3b82f6</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="height: 80px; background: #FFEF00; border-radius: 12px; margin-bottom: 0.5rem;"></div>
+        <div style="color: #d1d5db; font-size: 0.9rem;">Yellow Accent</div>
+        <div style="color: #6b7280; font-size: 0.8rem;">#FFEF00</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="height: 80px; background: #a855f7; border-radius: 12px; margin-bottom: 0.5rem;"></div>
+        <div style="color: #d1d5db; font-size: 0.9rem;">Purple Accent</div>
+        <div style="color: #6b7280; font-size: 0.8rem;">#a855f7</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="height: 80px; background: #22c55e; border-radius: 12px; margin-bottom: 0.5rem;"></div>
+        <div style="color: #d1d5db; font-size: 0.9rem;">Green Accent</div>
+        <div style="color: #6b7280; font-size: 0.8rem;">#22c55e</div>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,61 @@
+<!-- Main App Container -->
+<div style="background: radial-gradient(ellipse at center, #1a1b23 0%, #0d0e14 100%); min-height: 100vh; color: white;">
+  <!-- Navbar Component -->
+  <app-navbar
+    [activeSection]="activeSection"
+    [isLoggedIn]="isLoggedIn"
+    (navClick)="onNavigation($event)"
+    (brandClick)="onBrandClick()"
+    (loginClick)="onLogin()"
+    (joinCommunityClick)="onJoinCommunity()"
+    (profileClick)="onProfile()"
+    (logoutClick)="onLogout()">
+  </app-navbar>
+
+  <!-- Auth Modals Component (from tayrawt-ui-kit) -->
+  <app-auth-modals (authSuccess)="onAuthSuccess($event)"></app-auth-modals>
+
+  <!-- Main Content -->
+  <div>
+    <!-- Dictionary Section -->
+    <div *ngIf="activeSection === 'dictionaries'">
+      <app-dictionary></app-dictionary>
+    </div>
+
+    <!-- UI Kit Showcase Section -->
+    <div *ngIf="activeSection === 'ui-kit'">
+      <app-ui-kit-showcase></app-ui-kit-showcase>
+    </div>
+
+  <!-- Translation Section -->
+  <div *ngIf="activeSection === 'translation'">
+    <app-translation></app-translation>
+  </div>
+
+  <!-- Conjugation Section -->
+  <div *ngIf="activeSection === 'conjugation'">
+    <app-conjugation></app-conjugation>
+  </div>
+
+
+  <!-- Fallback content if no section matches -->
+  <div *ngIf="activeSection !== 'dictionaries' && activeSection !== 'ui-kit' && activeSection !== 'translation' && activeSection !== 'conjugation'" class="demo-container">
+    <div style="text-align: center; padding: 3rem;">
+      <div style="font-size: 4rem; margin-bottom: 1rem;">❓</div>
+      <h3 style="color: #ffffff; margin-bottom: 1rem;">Page Not Found</h3>
+      <p style="color: #9ca3af;">The requested page could not be found.</p>
+      <div style="margin-top: 2rem;">
+        <button
+          class="px-6 py-3 bg-tarifit-primary text-white rounded-lg hover:bg-opacity-90 transition-all mr-4"
+          (click)="activeSection = 'dictionaries'">
+          Go to Dictionary
+        </button>
+        <button
+          class="px-6 py-3 bg-tarifit-accent text-white rounded-lg hover:bg-opacity-90 transition-all"
+          (click)="activeSection = 'ui-kit'">
+          Go to UI Kit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

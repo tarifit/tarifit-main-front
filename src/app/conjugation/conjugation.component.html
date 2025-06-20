@@ -1,0 +1,137 @@
+<div class="bg-grid"></div>
+
+<div class="conjugation-container">
+  <!-- Right vertical label -->
+  <div class="conjugation-left-label" *ngIf="showResults">
+    <span class="vertical-text">Conjugaison</span>
+  </div>
+
+  <!-- Header - always centered -->
+  <header class="conjugation-header" *ngIf="!showResults">
+    <h1 class="conjugation-title-main">Conjugation</h1>
+    <div class="conjugation-verb-count" *ngIf="!showResults">
+      <i class="fas fa-book"></i>
+      <span>2422 verbes conjugués</span>
+    </div>
+  </header>
+
+  <!-- Search and Verb Info Layout -->
+  <div class="conjugation-search-layout">
+    <!-- Left Verb Info Card -->
+    <div class="conjugation-verb-card" *ngIf="showResults && conjugationResults">
+      <div class="verb-card-content">
+        <div class="verb-name-meaning">{{ getDisplayVerb() }} {{ conjugationResults.meaning }}</div>
+      </div>
+    </div>
+
+    <!-- Centered search panel -->
+    <div class="conjugation-search-panel">
+      <div class="conjugation-search-container" [ngClass]="{'search-compact': showResults}">
+        <select class="conjugation-language-selector" [(ngModel)]="selectedLanguage">
+          <option value="tmazight">Tmaziɣt</option>
+          <option value="english">English</option>
+        </select>
+
+        <input
+          type="text"
+          class="conjugation-verb-input"
+          [(ngModel)]="verbInput"
+          placeholder="Rechercher..."
+          (input)="handleVerbInput()"
+          (keydown.enter)="onEnterPressed()"
+        />
+
+        <button class="conjugation-search-btn" (click)="searchVerb()">
+          <i class="fas fa-search"></i>
+          Rechercher
+        </button>
+
+        <button class="conjugation-keyboard-btn" (click)="toggleKeyboard()" title="Clavier rifain">
+          <i class="fas fa-keyboard"></i>
+        </button>
+
+        <button class="tips-toggle-btn" (click)="toggleTips()" title="Afficher/masquer l'aide">
+          💡 Tips
+        </button>
+      </div>
+
+      <!-- Collapsible tips -->
+      <div class="conjugation-help-text" [class.hidden]="!showTips">
+        <h3>Quelques éléments sur le verbe rifain.</h3>
+        <p>Il est conseillé d'effectuer vos recherches de verbes en rifain. Pour ce faire, utiliser la forme impérative des verbes, par exemple : <strong>ecc</strong> pour "manger". Si vous ne connaissez pas le verbe en rifain, vous pouvez également partir du français en cherchant sa forme infinitive. Par exemple, en cherchant "manger", vous trouverez la conjugaison rifaine de <strong>ecc</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conjugation Results - always centered -->
+  <div class="conjugation-results" [style.display]="showResults ? 'block' : 'none'">
+    <!-- Loading State -->
+    <div class="conjugation-loading-state" *ngIf="isLoading">
+      <div class="conjugation-spinner"></div>
+      <span class="conjugation-loading-text">Recherche de la conjugaison...</span>
+    </div>
+
+    <!-- Results Content -->
+    <div *ngIf="!isLoading && conjugationResults">
+      <!-- Main Conjugation Table -->
+      <div class="conjugation-section">
+        <div class="conjugation-table">
+          <div class="conjugation-table-header">
+            <div>Pronom</div>
+            <div>Prétérit</div>
+            <div>Prétérit négatif</div>
+            <div>Aoriste intensif</div>
+            <div>Aoriste intensif négatif</div>
+            <div>Aoriste (futur)</div>
+          </div>
+          <div class="conjugation-table-row" *ngFor="let pronoun of pronouns">
+            <div class="conjugation-pronoun">{{ pronoun }}</div>
+            <div class="conjugation-form">{{ conjugationResults.conjugations[pronoun].preterit }}</div>
+            <div class="conjugation-form">{{ conjugationResults.conjugations[pronoun].preteritNeg }}</div>
+            <div class="conjugation-form">{{ conjugationResults.conjugations[pronoun].aoristIntensif }}</div>
+            <div class="conjugation-form">{{ conjugationResults.conjugations[pronoun].aoristIntensifNeg }}</div>
+            <div class="conjugation-form">{{ conjugationResults.conjugations[pronoun].aorist }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Participles Section -->
+      <div class="conjugation-participles-section">
+        <div class="conjugation-participles-title">Les participes</div>
+        <div class="conjugation-participles-grid">
+          <div class="conjugation-participle-item">
+            <div class="conjugation-participle-label">Participe du prétérit</div>
+            <div class="conjugation-participle-form">{{ conjugationResults.participles.preterit }}</div>
+          </div>
+          <div class="conjugation-participle-item">
+            <div class="conjugation-participle-label">Participe du prétérit négatif</div>
+            <div class="conjugation-participle-form">{{ conjugationResults.participles.preteritNeg }}</div>
+          </div>
+          <div class="conjugation-participle-item">
+            <div class="conjugation-participle-label">Participe de l'aoriste intensif</div>
+            <div class="conjugation-participle-form">{{ conjugationResults.participles.aoristIntensif }}</div>
+          </div>
+          <div class="conjugation-participle-item">
+            <div class="conjugation-participle-label">Participe de l'aoriste intensif négatif</div>
+            <div class="conjugation-participle-form">{{ conjugationResults.participles.aoristIntensifNeg }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Results -->
+    <div class="conjugation-no-results" *ngIf="!isLoading && !conjugationResults && showResults">
+      <div class="conjugation-no-results-icon">🔍</div>
+      <h3>Verbe non trouvé</h3>
+      <p>
+        Le verbe "<strong>{{ verbInput }}</strong>" n'a pas été trouvé dans notre base de données.
+        <br><br>
+        Essayez avec la forme impérative du verbe ou recherchez en français.
+      </p>
+      <button class="conjugation-search-btn" style="margin-top: 20px;" (click)="clearSearch()">
+        <i class="fas fa-search"></i>
+        Nouvelle recherche
+      </button>
+    </div>
+  </div>
+</div>

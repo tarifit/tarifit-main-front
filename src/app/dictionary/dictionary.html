@@ -1,0 +1,136 @@
+<div class="bg-grid"></div>
+<div class="bg-stars" id="bgStars"></div>
+
+<div class="container">
+    <div class="main-content">
+        <!-- Header with centered title -->
+        <header class="header">
+            <div class="title-section">
+                <h1 class="title-main">Tamawalt</h1>
+                <span class="title-sub">Dictionary</span>
+            </div>
+        </header>
+
+        <!-- Background Star -->
+        <div class="banu-marin-star">
+            <div class="star-8-point">
+                <div class="star-square"></div>
+                <div class="star-diamond"></div>
+            </div>
+        </div>
+
+        <!-- Knight Illustration -->
+        <div class="knight-illustration"></div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    placeholder="Search in Tarifit..."
+                    [(ngModel)]="searchQuery"
+                    (keypress)="handleKeyPress($event)"
+                >
+                <button class="search-btn" (click)="performSearch()"></button>
+            </div>
+
+            <div class="filters-section">
+                <div class="filter-group">
+                    <span class="filter-label">Dialects:</span>
+                    <div class="toggle-group">
+                        <div class="custom-toggle" (click)="toggleDialect('aqelei')">
+                            <div class="toggle-switch" [class.active]="dialects.aqelei">
+                                <div class="toggle-thumb"></div>
+                            </div>
+                            <span>Aqelɛi</span>
+                        </div>
+                        <div class="custom-toggle" (click)="toggleDialect('waryaghri')">
+                            <div class="toggle-switch" [class.active]="dialects.waryaghri">
+                                <div class="toggle-thumb"></div>
+                            </div>
+                            <span>Waryaghri</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <span class="filter-label">Search Mode:</span>
+                    <div class="mode-buttons">
+                        <button class="mode-btn" [class.active]="searchMode === 'semantic'" (click)="setSearchMode('semantic')">Semantic</button>
+                        <button class="mode-btn" [class.active]="searchMode === 'exact'" (click)="setSearchMode('exact')">Exact</button>
+                        <button class="mode-btn" [class.active]="searchMode === 'fuzzy'" (click)="setSearchMode('fuzzy')">Fuzzy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Container -->
+        <div class="results-container" *ngIf="showResults">
+            <div class="results-header">
+                <div class="results-count">{{ resultsCount }}</div>
+                <select class="sort-select" [(ngModel)]="sortOption" (change)="sortResults()">
+                    <option value="relevance">Sort by relevance</option>
+                    <option value="alphabetical">Sort alphabetically</option>
+                    <option value="dialect">Sort by dialect</option>
+                </select>
+            </div>
+            <div id="resultsContent">
+                <!-- Loading State -->
+                <div class="loading" *ngIf="isLoading">
+                    <div class="spinner"></div>
+                    <div style="color: #d1d5db;">Searching through Tarifit vocabulary...</div>
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" *ngIf="!isLoading && searchResults.length === 0">
+                    <div class="empty-title">{{ hasSearched ? 'No matches found' : 'Start Your Journey' }}</div>
+                    <div class="empty-message">
+                        <span *ngIf="hasSearched">
+                            Try different search terms or enable both dialects.<br>
+                            Semantic search can help find related meanings.
+                        </span>
+                        <span *ngIf="!hasSearched">
+                            Type your query above to discover words across Aqel'i and Waryaghri dialects.<br>
+                            Try searching for "abəḥri" (sea) or "water" to get started.
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Results Grid -->
+                <div class="word-grid" *ngIf="!isLoading && searchResults.length > 0">
+                    <div class="word-card" *ngFor="let word of searchResults" (click)="selectWord(word.word)">
+                        <div class="word-main">{{ word.word }}</div>
+                        <div class="word-translation">{{ word.translation }}</div>
+                        <div class="word-details">
+                            <span class="detail-badge dialect-badge">{{ word.dialect }}</span>
+                            <span class="detail-badge similarity-badge" *ngIf="word.match">
+                                {{ word.match }}% match
+                            </span>
+                        </div>
+                        <div class="word-example" *ngIf="word.example">
+                            "{{ word.example }}"
+                        </div>
+                        <div class="word-actions">
+                            <div class="pronunciation">
+                                <i class="fas fa-volume-up"></i>
+                                <span>{{ word.phonetic || 'N/A' }}</span>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="action-btn" (click)="playAudio(word.word, $event)" title="Pronounce">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <button class="action-btn" (click)="favoriteWord(word.word, $event)" title="Favorite">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                                <button class="action-btn" (click)="shareWord(word.word, $event)" title="Share">
+                                    <i class="fas fa-share"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

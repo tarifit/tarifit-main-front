@@ -1,0 +1,141 @@
+<div class="bg-grid"></div>
+
+<div class="container">
+  <!-- Header -->
+  <header class="header">
+    <h1 class="title-main">Translation</h1>
+    <p class="subtitle">Translate between Tarifit and world languages</p>
+  </header>
+
+  <!-- Translation Panel -->
+  <div class="translation-panel">
+    <!-- Language Selector Bar -->
+    <div class="language-bar">
+      <div class="language-selector">
+        <select class="language-dropdown" 
+                [(ngModel)]="sourceLanguage"
+                (change)="handleInput()">
+          <option *ngFor="let lang of sourceLanguages" [value]="lang.value">
+            {{ lang.icon }} {{ lang.label }}
+          </option>
+        </select>
+      </div>
+      
+      <button class="swap-languages" 
+              (click)="swapLanguages()" 
+              title="Swap languages"
+              [disabled]="sourceLanguage === 'auto'">
+        ⇄
+      </button>
+      
+      <div class="language-selector">
+        <select class="language-dropdown" 
+                [(ngModel)]="targetLanguage"
+                (change)="handleInput()">
+          <option *ngFor="let lang of targetLanguages" [value]="lang.value">
+            {{ lang.icon }} {{ lang.label }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Translation Areas -->
+    <div class="translation-areas">
+      <!-- Source Text Area -->
+      <div class="text-area source-area" 
+           [class.active]="sourceAreaActive"
+           (click)="sourceTextarea.focus()">
+        <textarea 
+          #sourceTextarea
+          class="translation-input"
+          [(ngModel)]="sourceText"
+          placeholder="Enter text to translate...&#10;&#10;Try: 'aman' (water) or 'azul' (hello)"
+          (input)="handleInput()"
+          (focus)="sourceAreaActive = true"
+          (blur)="sourceAreaActive = false"
+          [maxlength]="maxChars"></textarea>
+        <div class="input-actions">
+          <div class="action-buttons">
+            <button class="action-btn" 
+                    (click)="startVoiceInput()" 
+                    title="Voice input">
+              <i class="fas fa-microphone"></i>
+            </button>
+            <button class="action-btn" 
+                    (click)="uploadFile()" 
+                    title="Upload file">
+              <i class="fas fa-upload"></i>
+            </button>
+            <button class="action-btn" 
+                    (click)="clearText()" 
+                    title="Clear text"
+                    [disabled]="!sourceText">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+          <span class="char-count" [ngClass]="charCountClass">
+            {{ charCount }}/{{ maxChars }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="translation-divider">
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- Target Text Area -->
+      <div class="text-area target-area" [class.active]="targetAreaActive">
+        <div class="translation-output">
+          <!-- Loading State -->
+          <div *ngIf="isLoading" class="loading-state">
+            <div class="translation-spinner"></div>
+            <span>Translating...</span>
+          </div>
+          
+          <!-- Translated Text -->
+          <div *ngIf="!isLoading && hasTranslation" class="translated-text">
+            {{ translatedText }}
+          </div>
+          
+          <!-- Default Message -->
+          <div *ngIf="showDefaultMessage" style="color: #6b7280; text-align: center;">
+            Translation will appear here...
+            <br><br>
+            <small>✨ Powered by Tarifit AI Translation</small>
+          </div>
+        </div>
+        <div class="output-actions">
+          <div class="action-buttons">
+            <button class="action-btn" 
+                    (click)="playAudio()" 
+                    title="Listen to pronunciation"
+                    [disabled]="!hasTranslation">
+              <i class="fas fa-volume-up"></i>
+            </button>
+            <button class="action-btn" 
+                    (click)="copyTranslation()" 
+                    title="Copy translation"
+                    [disabled]="!hasTranslation">
+              <i class="fas fa-copy"></i>
+            </button>
+            <button class="action-btn" 
+                    (click)="saveTranslation()" 
+                    title="Save to favorites"
+                    [disabled]="!hasTranslation">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+          <span class="char-count">{{ outputCharCount }} chars</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Notification -->
+<div class="notification" 
+     [class.show]="showNotification"
+     [style.display]="showNotification ? 'block' : 'none'">
+  {{ notificationMessage }}
+</div>
